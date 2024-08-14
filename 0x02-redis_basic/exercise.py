@@ -43,8 +43,8 @@ class Cache:
 
     def get_str(self, data: Union[str, bytes, int, float]) -> str:
         """Get string from redis"""
-        return str(data)
+        return data.decode('utf-8')
 
     def get_int(self, data: Union[str, bytes, int, float]) -> int:
         """Get int from redis"""
-        return int(data)
+        return data.decode('utf-8')
