@@ -38,12 +38,12 @@ class Cache:
         if data:
             return fn(data)
         # return None
-        return data
+        return None
 
-    def get_str(self, data) -> str:
+    def get_str(self, data: Union[str, bytes, int, float]) -> str:
         """Get string from redis"""
         return str(data)
 
-    def get_int(self, data) -> int:
+    def get_int(self, data: Union[str, bytes, int, float]) -> int:
         """Get int from redis"""
         return int(data)
