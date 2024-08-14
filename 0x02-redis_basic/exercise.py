@@ -35,27 +35,16 @@ class Cache:
     ) -> Union[str, bytes, int, float]:
         """Get data from redis"""
         data = self._redis.get(key)
-        if data:
-            if fn:
-                return fn(data)
-        # return None
-        return None
+
+        if fn:
+            return fn(data)
+
+        return data
 
     def get_str(self, data: Union[str, bytes, int, float]) -> str:
         """Get string from redis"""
         return data.decode('utf-8')
 
-    # def get_int(self, data: Union[str, bytes, int, float]) -> int:
-    #     """Get int from redis"""
-    #     return data.decode('utf-8')
-
-    def get_int(self, key: str) -> int:
-        '''
-            Get an int from the cache.
-        '''
-        value = self._redis.get(key)
-        try:
-            value = int(value.decode('utf-8'))
-        except Exception:
-            value = 0
-        return value
+    def get_int(self, data: Union[str, bytes, int, float]) -> int:
+        """Get int from redis"""
+        return data.decode('utf-8')
