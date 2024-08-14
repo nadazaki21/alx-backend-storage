@@ -5,19 +5,27 @@ from uuid import uuid4
 import redis
 from functools import wraps
 
-""" Exercise file for mandatory tasks  """
+"""
+    Writing strings to Redis.
+"""
 
 
 class Cache:
-    """Class for cache"""
+    """
+    Cache class.
+    """
 
     def __init__(self):
-        """Initialize cache"""
+        """
+        Initialize the cache.
+        """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """Store data in redis"""
-        random_id = str(uuid4())
-        self.__redis.set(random_id, data)
-        return random_id
+        """
+        Store data in the cache.
+        """
+        randomKey = str(uuid4())
+        self._redis.set(randomKey, data)
+        return randomKey
