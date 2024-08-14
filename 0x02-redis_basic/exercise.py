@@ -6,7 +6,10 @@ import uuid
 from typing import Union, Callable
 from functools import wraps
 
-
+def replay(self, method: Callable):
+    """  function to display the history of calls of a particular function. """
+    number_of_calls = self.__redis.get(method.__qualname__)
+    print(f"{method.__qualname__}was called {number_of_calls} times")
 def call_history(method: Callable) -> Callable:
     """Call history decorator"""
 
