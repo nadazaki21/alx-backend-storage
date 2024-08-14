@@ -2,7 +2,7 @@
 """ Exercise file for mandatory tasks  """
 
 import redis
-import uuid
+from uuid import uuid4
 from typing import Union, Callable, Optional
 from functools import wraps
 
@@ -17,6 +17,6 @@ class Cache:
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store data in redis"""
-        random_id = str(uuid.uuid4())
+        random_id = str(uuid4())
         self.__redis.set(random_id, data)
         return random_id
