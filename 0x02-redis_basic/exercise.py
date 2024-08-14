@@ -19,4 +19,4 @@ class Cache:
         """Store data in redis"""
         random_id = str(uuid4())
         self.__redis.set(random_id, data)
-        return str(random_id)
+        return random_id
