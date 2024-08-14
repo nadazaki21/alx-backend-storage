@@ -4,9 +4,17 @@
 import redis
 import uuid
 from typing import Union, Callable
+from functools import wraps
 
 
-# def count_calls(fn: Callable) -> Callable:
+def count_calls(method : Callable )-> Callable:
+    @wraps(method)
+    def inner(self,method):
+        self.__redis.incr(method.__qualname__)
+        return method(self,method)
+    return inner  
+        
+    
 class Cache:
     """Class for cache"""
 
@@ -14,7 +22,8 @@ class Cache:
         """Initialize cache"""
         self._redis = redis.Redis()
         self._redis.flushdb()
-
+    
+    @count_calls    
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store data in redis"""
         random_id = str(uuid.uuid4())
