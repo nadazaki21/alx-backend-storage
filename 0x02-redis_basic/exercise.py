@@ -3,7 +3,7 @@
 
 import redis
 import uuid
-from typing import Union, Callable
+from typing import Union, Callable, Optional
 from functools import wraps
 
 def replay(self, method: Callable):
@@ -49,12 +49,13 @@ class Cache:
         self.__redis.set(random_id, data)
         return random_id
 
-    def get(self, key: str, fn: callable = None):
+    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
         """Get data from redis"""
         data = self._redis.get(key)
         if data:
             return fn(data)
-        return None
+        #return None
+        return data
 
     def get_str(self, data) -> str:
         """Get string from redis"""
