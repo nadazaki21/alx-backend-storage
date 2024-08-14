@@ -3,13 +3,13 @@
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
-
+# def count_calls(fn: Callable) -> Callable:
 class Cache:
     """Class for cache"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
