@@ -36,7 +36,8 @@ class Cache:
         """Get data from redis"""
         data = self._redis.get(key)
         if data:
-            return fn(data)
+            if fn:
+                return fn(data)
         # return None
         return None
 
