@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-""" Exercise file for mandatory tasks  """
 
 from typing import Callable, Optional, Union
 from uuid import uuid4
 import redis
 from functools import wraps
+
+""" Exercise file for mandatory tasks  """
 
 
 class Cache:
