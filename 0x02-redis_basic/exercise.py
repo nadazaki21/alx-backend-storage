@@ -17,3 +17,15 @@ class Cache:
         random_id = str(uuid.uuid4())
         self.__redis.set(random_id, data)
         return random_id
+
+    def get(self, key: str, fn: callable = None):
+        data = self._redis.get(key)
+        if data:
+            return fn(data)
+        return None
+
+    def get_str(self, data) -> str:
+        return str(data)
+
+    def get_int(self, data) -> int:
+        return int(data)
