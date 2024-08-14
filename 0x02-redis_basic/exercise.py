@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """ Exercise file for mandatory tasks  """
 
-import redis
+from typing import Callable, Optional, Union
 from uuid import uuid4
-from typing import Union, Callable, Optional
+import redis
 from functools import wraps
 
 
 class Cache:
     """Class for cache"""
 
-    def __init__(self) -> None:
+    def __init__(self):
         """Initialize cache"""
         self._redis = redis.Redis()
         self._redis.flushdb()
