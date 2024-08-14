@@ -7,14 +7,29 @@ from typing import Union, Callable
 from functools import wraps
 
 
-def count_calls(method : Callable )-> Callable:
+def call_history(method: Callable) -> Callable:
+    """Call history decorator"""
+
     @wraps(method)
-    def inner(self,method):
+    def inner(self, *args):
+        output = self.__redis.rpush(f"{method.__qualname__}:inputs", args)
+        self.__redis.lpush(f"{method.__qualname__}:output", str(output))
+        return output
+
+    return inner
+
+
+def count_calls(method: Callable) -> Callable:
+    """Count calls in redis decorator"""
+
+    @wraps(method)
+    def inner(self, method):
         self.__redis.incr(method.__qualname__)
-        return method(self,method)
-    return inner  
-        
-    
+        return method(self, method)
+
+    return inner
+
+
 class Cache:
     """Class for cache"""
 
@@ -22,8 +37,9 @@ class Cache:
         """Initialize cache"""
         self._redis = redis.Redis()
         self._redis.flushdb()
-    
-    @count_calls    
+
+    @call_history
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store data in redis"""
         random_id = str(uuid.uuid4())
