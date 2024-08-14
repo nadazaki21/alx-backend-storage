@@ -29,3 +29,21 @@ class Cache:
         randomKey = str(uuid4())
         self._redis.set(randomKey, data)
         return randomKey
+
+    def get(
+        self, key: str, fn: Optional[Callable] = None
+    ) -> Union[str, bytes, int, float]:
+        """Get data from redis"""
+        data = self._redis.get(key)
+        if data:
+            return fn(data)
+        # return None
+        return data
+
+    def get_str(self, data) -> str:
+        """Get string from redis"""
+        return str(data)
+
+    def get_int(self, data) -> int:
+        """Get int from redis"""
+        return int(data)
