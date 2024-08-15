@@ -34,7 +34,12 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 def call_history(method: Callable) -> Callable:
-    """Call history decorator"""
+    """
+    add its input parameters to one list
+    in redis, and store its output into another list.
+    :param method:
+    :return:
+    """
 
     key = method.__qualname__
     i = "".join([key, ":inputs"])
@@ -42,12 +47,10 @@ def call_history(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args):
         """ inner """
-        def wrapper(self, *args, **kwargs):
-            """ Wrapp """
-            self._redis.rpush(i, str(args))
-            res = method(self, *args, **kwargs)
-            self._redis.rpush(o, str(res))
-            return res
+        self._redis.rpush(i, str(args))
+        res = method(self, *args)
+        self._redis.rpush(o, str(res))
+        return res
 
     return wrapper
 
