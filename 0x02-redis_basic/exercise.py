@@ -17,7 +17,7 @@ def replay(self, method: Callable):
     outputs = self.__redis.lrange(method.__qualname__ + ":outputs", 0, -1)
     inputs = self.__redis.lrange(method.__qualname__ + ":inputs", 0, -1)
     for input, output in zip(inputs, outputs):
-        print(f"{method.__qualname__}(*{input.decode('utf-8')}) -> {output.decode('utf-8')}")
+        print(f"{method.__qualname__}(*{input}) -> {output}")
 
 
 def count_calls(method: Callable) -> Callable:
