@@ -17,7 +17,7 @@ def count_calls(method: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         """Count calls in redis decorator"""
         self.__redis.incr(method.__qualname__)
-        return method(self, method)
+        return method(self, *args, **kwargs)
 
     return wrapper
 
