@@ -10,6 +10,16 @@ from functools import wraps
 """
 
 
+def replay(self, method: Callable):
+    """function to display the history of calls of a particular function."""
+    number_of_calls = self.__redis.get(method.__qualname__)
+    print(f"{method.__qualname__}was called {number_of_calls} times")
+    outputs = self.__redis.lrange(method.__qualname__ + ":outputs", 0, -1)
+    inputs = self.__redis.lrange(method.__qualname__ + ":inputs", 0, -1)
+    for input, output in zip(inputs, outputs):
+        print(f"{method.__qualname__}(*{input}) -> {output}")
+
+
 def count_calls(method: Callable) -> Callable:
     """
     a system to count how many
@@ -33,6 +43,7 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """
     add its input parameters to one list
@@ -46,7 +57,7 @@ def call_history(method: Callable) -> Callable:
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
-        """ Wrapp """
+        """Wrapp"""
         self._redis.rpush(i, str(args))
         res = method(self, *args, **kwargs)
         self._redis.rpush(o, str(res))
