@@ -14,12 +14,12 @@ def count_calls(method: Callable) -> Callable:
     """Count calls in redis decorator"""
 
     @wraps(method)
-    def inner(self, method):
+    def wrapper(self, *args, **kwargs):
         """Count calls in redis decorator"""
         self.__redis.incr(method.__qualname__)
         return method(self, method)
 
-    return inner
+    return wrapper
 
 
 class Cache:
