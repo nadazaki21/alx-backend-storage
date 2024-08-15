@@ -36,14 +36,12 @@ def count_calls(method: Callable) -> Callable:
 def call_history(method: Callable) -> Callable:
     """Call history decorator"""
 
+    key = method.__qualname__
+    i = "".join([key, ":inputs"])
+    o = "".join([key, ":outputs"])
     @wraps(method)
     def wrapper(self, *args):
         """ inner """
-        key = method.__qualname__
-        i = "".join([key, ":inputs"])
-        o = "".join([key, ":outputs"])
-
-        @wraps(method)
         def wrapper(self, *args, **kwargs):
             """ Wrapp """
             self._redis.rpush(i, str(args))
