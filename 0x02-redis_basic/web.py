@@ -8,18 +8,18 @@ from functools import wraps
 redis_obj = redis.Redis()
 
 
-def wrapper_function(f: Callable) -> Callable:
+def wrapper_function(fn: Callable) -> Callable:
     """wrapper function"""
 
-    @wraps(f)
-    def wrapper(url: str, *args, **kwargs):
+    @wraps(fn)
+    def wrapper(url: str):
         redis_obj.incr(f"count:{url}")
         # the cached data may still have not expired
         cached_data = redis_obj.get(f"cached:{url}")
         if cached_data:
             return cached_data.decode("utf-8")
 
-        response = f(url, *args, **kwargs)
+        response = fn(url)
         redis_obj.setex(f"cached:{url}", 10, response)
         return response
 
