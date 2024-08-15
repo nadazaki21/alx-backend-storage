@@ -40,15 +40,15 @@ def call_history(method: Callable) -> Callable:
     :param method:
     :return:
     """
-
     key = method.__qualname__
     i = "".join([key, ":inputs"])
     o = "".join([key, ":outputs"])
+
     @wraps(method)
-    def wrapper(self, *args):
-        """ inner """
+    def wrapper(self, *args, **kwargs):
+        """ Wrapp """
         self._redis.rpush(i, str(args))
-        res = method(self, *args)
+        res = method(self, *args, **kwargs)
         self._redis.rpush(o, str(res))
         return res
 
