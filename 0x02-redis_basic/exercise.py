@@ -10,6 +10,18 @@ from functools import wraps
 """
 
 
+def count_calls(method: Callable) -> Callable:
+    """Count calls in redis decorator"""
+
+    @wraps(method)
+    def inner(self, method):
+        """Count calls in redis decorator"""
+        self.__redis.incr(method.__qualname__)
+        return method(self, method)
+
+    return inner
+
+
 class Cache:
     """
     Cache class.
@@ -43,8 +55,8 @@ class Cache:
 
     def get_str(self, data: Union[str, bytes, int, float]) -> str:
         """Get string from redis"""
-        return data.decode('utf-8')
+        return data.decode("utf-8")
 
     def get_int(self, data: Union[str, bytes, int, float]) -> int:
         """Get int from redis"""
-        return data.decode('utf-8')
+        return data.decode("utf-8")
