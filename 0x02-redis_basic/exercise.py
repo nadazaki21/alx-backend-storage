@@ -37,7 +37,7 @@ def call_history(method: Callable) -> Callable:
     """Call history decorator"""
 
     @wraps(method)
-    def inner(self, *args):
+    def wrapper(self, *args):
         """ inner """
         key = method.__qualname__
         i = "".join([key, ":inputs"])
@@ -51,7 +51,7 @@ def call_history(method: Callable) -> Callable:
             self._redis.rpush(o, str(res))
             return res
 
-    return inner
+    return wrapper
 
 
 class Cache:
