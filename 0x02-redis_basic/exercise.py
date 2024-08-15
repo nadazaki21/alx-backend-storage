@@ -33,6 +33,19 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+def call_history(method: Callable) -> Callable:
+    """Call history decorator"""
+
+    @wraps(method)
+    def inner(self, *args):
+        """ inner """
+        self.__redis.rpush(f"{method.__qualname__}:inputs", str(args))
+        res = method(self, *args)
+        self.__redis.rpush(f"{method.__qualname__}:outputs", str(res))
+        return res
+
+    return inner
+
 
 class Cache:
     """
